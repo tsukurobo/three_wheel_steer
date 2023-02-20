@@ -1,0 +1,47 @@
+<launch>
+    <arg name="joy_dev"         default="/dev/input/js2"/>
+    <arg name="joy_node"        default="true"/>
+    <arg name="joy_controller"      default="true"/>
+    <arg name="arduino"         default="true"/>
+
+    <group if="$(arg joy_node)">
+        <node name="joy_node" pkg="joy" type="joy_node" required="true">
+            <param name="dev" value="$(arg joy_dev)"/>
+        </node>
+    </group>
+
+    <group if="$(arg joy_controller)">
+        <node name="joy_controller" pkg="joy_controller" type="joy_controller" output="screen" required="true">
+            <param name="v_max" value="0.5"/>
+            <param name="w_max" value="0.25"/>
+            <param name="TurnRadius_min" value="0.8"/>
+            <param name="TurnRadius_max" value="10000000"/>
+            <param name="Vkpl" value="0.0"/>
+            <param name="Vkil" value="0.0"/>
+            <param name="Vkdl" value="0.0"/>
+            <param name="Pkpl" value="0.35"/>
+            <param name="Pkil" value="0.1"/>
+            <param name="Pkdl" value="0.0"/>
+            <param name="Vkpr" value="0.0"/>
+            <param name="Vkir" value="0.0"/>
+            <param name="Vkdr" value="0.0"/>
+            <param name="Pkpr" value="0.35"/>
+            <param name="Pkir" value="0.1"/>
+            <param name="Pkdr" value="0.0"/>
+            <param name="Vkpb" value="0.0"/>
+            <param name="Vkib" value="0.0"/>
+            <param name="Vkdb" value="0.0"/>
+            <param name="Pkpb" value="0.35"/>
+            <param name="Pkib" value="0.1"/>
+            <param name="Pkdb" value="0.0"/>
+            <param name="freq" value="100"/>
+        </node>
+    </group>
+
+    <group if="$(arg arduino)">
+        <node name="arduino" pkg="rosserial_python" type="serial_node.py" output="screen" required="true">
+            <param name="port" value="/dev/ttyACM0"/>
+            <param name="baud" value="115200"/>
+        </node>
+    </group>
+</launch>
